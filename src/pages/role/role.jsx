@@ -7,7 +7,7 @@ export default class Role extends Component {
     render() {
         return (
             <div>
-                Role
+                Role of user
             </div>
         )
     }
