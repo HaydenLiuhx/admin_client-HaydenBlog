@@ -1,11 +1,15 @@
 //import React, { Component } from 'react'
 import React from 'react';
+import {Redirect} from 'react-router-dom'
 //import ReactDOM from 'react-dom';
 import { Input, Button, Checkbox } from 'antd';
 import { Form, Icon } from '@ant-design/compatible';
-
+import { message } from 'antd'
 import './login.less'
 import logo from './images/logo.png'
+import { reqLogin } from '../../api'
+import memoryUtils from '../../utils/memoryUtils'
+import storageUtils from '../../utils/storageUtils'
 import '@ant-design/compatible/assets/index.css';
 //const Item = Form.Item; //不能写在import前
 
@@ -16,12 +20,27 @@ class NormalLoginForm extends React.Component {
         //阻止事件的默认行为
         e.preventDefault();
         //对所有表单字段进行校验
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
                 // 校验成功
-
-                //const {username, password} = values
-                console.log('Received values of form: ', values);
+                const { username, password } = values
+                const result = await reqLogin(username, password)
+                //console.log("Request successful", response.data)
+                //{status:0, data: user} //{status:1, msg:xx}
+                
+                if (result.status === 0){
+                    //显示登录成功
+                    message.success("Login successfully")
+                    const user = result.data
+                    memoryUtils.user = user //保存在内存中
+                    storageUtils.saveUser(user) //保存到localstorage
+                    //跳转到后台管理界面
+                    //push(),replace()
+                    this.props.history.replace('/') //不需要再回退回来
+                }
+                else { //登录失败,提示错误信息
+                    message.error(result.msg)
+                }
             }
             else {
                 console.log(err)
@@ -63,6 +82,11 @@ class NormalLoginForm extends React.Component {
 
 
     render() {
+        //如果用户已经登录,自动跳转到管理界面
+        const user = memoryUtils.user
+        if(user && user._id) {
+            return <Redirect to='/admin'/>
+        }
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="login">
@@ -88,6 +112,7 @@ class NormalLoginForm extends React.Component {
                                     { min: 4, message: 'username.length > 4!' },
                                     { max: 12, message: 'username.length < 12' },
                                     { pattern: /^[a-zA-Z0-9_]+$/, message: 'username should be English,number or _' }],
+                                    //initialValue: 'Hayden?'
                                 })(
                                     <Input
                                         prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -169,3 +194,19 @@ export default WrapLogin
 3). 必须小于等于 12 位
 
 4). 必须是英文、数字或下划线组成 */
+
+/*
+async和await
+1.作用?
+    简化promise对象的使用,消灭了.then()来指定成功或者失败回掉函数
+    以同步编码(无回调函数)方式实现异步流程
+2.哪里写await和async
+    在返回promise的表达式左侧写await, 不想要promise,想要promise异步执行成功的value数据
+    await所在函数(最近的)定义的左侧
+
+reqLogin(username, password).then(response => { //由axios文档决定
+                    console.log('successful', response.data)
+                }).catch(error => {
+                    console.log('failed', error)
+                }) // ^ + -
+*/
