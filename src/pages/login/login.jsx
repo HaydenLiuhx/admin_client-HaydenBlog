@@ -1,12 +1,13 @@
 //import React, { Component } from 'react'
 import React from 'react';
+// eslint-disable-next-line
 import {Redirect} from 'react-router-dom'
 //import ReactDOM from 'react-dom';
 import { Input, Button, Checkbox } from 'antd';
 import { Form, Icon } from '@ant-design/compatible';
 import { message } from 'antd'
 import './login.less'
-import logo from './images/logo.png'
+import logo from '../../assets/images/logo.png'
 import { reqLogin } from '../../api'
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
@@ -82,11 +83,12 @@ class NormalLoginForm extends React.Component {
 
 
     render() {
-        //如果用户已经登录,自动跳转到管理界面
-        const user = memoryUtils.user
-        if(user && user._id) {
-            return <Redirect to='/admin'/>
-        }
+        //如果用户已经登录,自动跳转到管理界面,先关闭!!
+
+        // const user = memoryUtils.user
+        // if(user && user._id) {
+        //     return <Redirect to='/admin'/>
+        // }
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="login">
