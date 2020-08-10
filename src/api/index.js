@@ -10,12 +10,21 @@ import {message} from 'antd'
 /* export function reqLogin(username,password) {
     return ajax('/login', {username,password}, 'POST')
 } */
-const BASE = ''
+const BASE = '/api'
 
-export const reqLogin = (username,password) => ajax(BASE + '/api/login', {username,password}, 'POST')
+export const reqLogin = (username,password) => ajax(BASE + '/login', {username,password}, 'POST')
 
 //添加用户
-export const reqAddUser = (user) => ajax(BASE + '/api/manage/user/add', user, 'POST')
+export const reqAddUser = (user) => ajax(BASE + '/manage/user/add', user, 'POST')
+
+//获取一级/二级分类的列表
+export const reqCategorys = (parentId) => ajax(BASE + '/manage/category/list', {parentId})
+//添加分类
+export const reqAddCategory = (categoryName, parentId) => ajax(BASE + '/manage/category/add', {categoryName, parentId}, 'POST')
+//更新分类
+export const reqUpdateCategory = (categoryId, categoryName) => ajax(BASE + '/manage/category/update', {categoryName, categoryId}, 'POST')
+
+
 
 //jsonp请求
 export const reqWeather = (city) => {
