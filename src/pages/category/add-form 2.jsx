@@ -1,0 +1,60 @@
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import {
+    Select,
+    Input
+} from 'antd'
+import {Form as LegacyForm} from '@ant-design/compatible';
+import Item from 'antd/lib/list/Item'
+
+const Option = Select.Option
+//const Item = Form.Item
+/*
+    添加分类的form组件
+*/
+class AddForm extends Component {
+
+    static propTypes = {
+        setForm: PropTypes.func.isRequired, //用来传递form对象的函数
+        categorys: PropTypes.array.isRequired, //一级分类的数组
+        parentId: PropTypes.string.isRequired, //父分类ID
+    }
+
+    componentWillMount() {
+        this.props.setForm(this.props.form)
+    }
+
+    render() {
+        const {categorys, parentId} = this.props
+        const { getFieldDecorator } = this.props.form
+        return (
+            <LegacyForm>
+                <Item>
+                    {getFieldDecorator('parentId', {
+                        initialValue: parentId
+                    })(
+                        <Select>
+                            <Option value='0'>一级分类</Option>
+                            {
+                                categorys.map(c => <Option value={c._id}>{c.name}</Option>)
+                            }
+                        </Select>
+                    )}
+
+                </Item>
+
+                <Item>
+                    {getFieldDecorator('categoryName', {
+                        initialValue: '',
+                        rules: [{required: true, message: '必须输入分类名称'}],
+                    })(
+                        <Input placeholder='请输入分类名称' />
+                    )}
+
+                </Item>
+            </LegacyForm>
+        )
+    }
+}
+
+export default LegacyForm.create()(AddForm)
