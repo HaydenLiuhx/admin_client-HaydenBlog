@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import { Card, Select, Input, Button, Icon, Table } from 'antd'
+import { Card, Select, Input, Button, Icon, Table, message } from 'antd'
 import LinkButton from '../../components/link-button'
-import { reqProducts } from '../../api'
-// eslint-disable-next-line
-import { reqSearchProducts } from '../../api'
+import { reqProducts, reqSearchProducts, reqUpdateStatus } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 const Option = Select.Option
 export default class ProductHome extends Component {
@@ -39,12 +37,18 @@ export default class ProductHome extends Component {
             {
                 width: 100,
                 title: '商品状态',
-                dataIndex: 'status',
-                render: (status) => {
+                //dataIndex: 'status',
+                render: (product) => {
+                    const {status, _id} = product
                     return (
                         <span>
-                            <Button type='primary'>下架</Button>
-                            <span>在售</span>
+                            <Button 
+                            type='primary' 
+                            onClick={() => this.updateStatus(_id, status===1 ? 2 : 1)}
+                            >
+                                {status===1 ? '下架' : '上架'}
+                            </Button>
+                            <span>{status===1 ? '在售' : '已下架'}</span>
                         </span>
                     )
                 }
@@ -55,7 +59,8 @@ export default class ProductHome extends Component {
                 render: (product) => {
                     return (
                         <span>
-                            <LinkButton>详情</LinkButton>
+                            {/* 将product传给路由组件 */}
+                            <LinkButton onClick={() => this.props.history.push('/product/detail', {product})}>详情</LinkButton>
                             <LinkButton>修改</LinkButton>
                         </span>
                     )
@@ -68,6 +73,7 @@ export default class ProductHome extends Component {
     获取指定页码的列表数据显示 
     */
     getProducts = async (pageNum) => {
+        this.pageNum = pageNum //保存pageNum,其他方法看得见
         this.setState({ loading: true }) //显示loading
 
         const {searchName, searchType} = this.state
@@ -89,6 +95,17 @@ export default class ProductHome extends Component {
             })
         }
     }
+
+    /* 
+    更新指定商品的状态
+    */
+   updateStatus = async (productId, status) => {
+       const result = await reqUpdateStatus(productId, status)
+       if (result.status ===0) {
+           message.success('更新商品成功')
+           this.getProducts(this.pageNum)
+       }
+   }
 
     UNSAFE_componentWillMount() {
         this.initColumns()
