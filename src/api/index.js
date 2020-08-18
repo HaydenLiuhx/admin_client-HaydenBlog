@@ -38,7 +38,8 @@ export const reqSearchProducts = (pageNum, pageSize, searchName, searchType) => 
 export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', {categoryId})
 //更新商品的状态(上架和下架)
 export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', {productId, status}, 'POST')
-
+//删除图片
+export const reqDeleteImg = (name) => ajax(BASE + '/manage/img/delete', {name}, 'POST')
 
 //jsonp请求
 export const reqWeather = (city) => {

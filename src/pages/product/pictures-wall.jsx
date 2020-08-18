@@ -1,5 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Upload, Icon, Modal, message } from 'antd';
+import {reqDeleteImg} from '../../api'
+import {BASE_IMG_URL} from '../../utils/constants'
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -9,25 +12,50 @@ function getBase64(file) {
     reader.onerror = error => reject(error);
   });
 }
-
 /* 
     用于图片上传
 */
-
 export default class PicturesWall extends React.Component {
-  state = {
-    previewVisible: false, //标识是否显示大图预览Modal
-    previewImage: '', //大图的地址
-    fileList: [
-      {
-        uid: '-1', //每个file都有自己唯一的ID
-        name: 'image.png', //图片文件名
+
+static propTypes = {
+  imgs: PropTypes.array
+}
+state = {
+      previewVisible: false, //标识是否显示大图预览Modal
+      previewImage: '', //大图的地址
+      fileList:[]//所有已经上传图片的数组
+}
+  constructor (props) {
+    super(props)
+
+    let fileList = []
+    //如果传入了imgs属性
+    const {imgs} = this.props
+    // console.log(imgs.length)
+    // console.log(imgs)
+    if (imgs && imgs.length > 1) {
+      fileList = imgs.map((img,index) => ({
+        uid: -index, //每个file都有自己唯一的ID,防止和内部ID产生冲突
+        name: img, //图片文件名
         status: 'done', //图片状态,uploading,remove
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-      
-    ],
-  };
+        url: BASE_IMG_URL + img
+      }))
+
+    }
+    //初始化状态
+    this.state = {
+      previewVisible: false, //标识是否显示大图预览Modal
+      previewImage: '', //大图的地址
+      fileList //所有已经上传图片的数组
+    }
+  }
+
+  /* 
+    获得所有已上传文件名的数组
+  */
+  getImgs = () => {
+    return this.state.fileList.map(file => file.name)
+  }
 
   //隐藏Modal
   handleCancel = () => this.setState({ previewVisible: false });
@@ -49,20 +77,31 @@ export default class PicturesWall extends React.Component {
   file: 当前操作的图片文件(上传/删除)
   fileList: 所有已上传图片的数组 
   */
-  handleChange = ({ file, fileList }) => {
+  handleChange = async ({ file, fileList }) => {
     console.log('handleChange()', file, fileList)
 
     //一旦上传成功,将当前上传的file的信息进行修正(name,url)
-    if(file.status==='done') {
+    if (file.status === 'done') {
       const result = file.response // {status: 0 data: {name: 'xxx', url: '图片的地址'}}
-      if (result.status===0)
-      message.success('上传图片成功')
-    } else {
-      message.error('上传图片失败')
+      if (result.status === 0) {
+        message.success('上传图片成功')
+        const { name, url } = result.data
+        file = fileList[fileList.length - 1]
+        file.name = name
+        file.url = url
+      } else {
+        message.error('上传图片失败')
+      }
+    } else if (file.status==="removed") { //删除图片
+      const result = await reqDeleteImg(file.name)
+      if (result.status===0) {
+        message.success("删除图片成功")
+      } else {
+        message.error("删除图片失败")
+      }
     }
-
-    //在操作过程中(上传/删除)更新fileList的状态
-    this.setState({ fileList })
+      //在操作过程中(上传/删除)更新fileList的状态
+      this.setState({ fileList })
   };
 
   render() {

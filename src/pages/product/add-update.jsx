@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-// eslint-disable-next-line
-import { Card, Form, Input, Cascader, Upload, Button, Icon, Alert } from 'antd'
+import { Card, Form, Input, Cascader, Button, Icon } from 'antd'
 import LinkButton from '../../components/link-button'
 import { reqCategorys } from '../../api'
 import PicturesWall from './pictures-wall'
+import RichTextEditor from  './rich-text-editor'
 const { Item } = Form
 const { TextArea } = Input;
 
@@ -14,6 +14,15 @@ class ProductAddUpdate extends Component {
         options: []
     }
 
+    constructor(props) {
+        super(props)
+        //创建用来保存ref标识的标签对象的容器
+        this.pw = React.createRef()
+        this.editor = React.createRef()
+    }
+
+
+
     initOptions = async (categorys) => {
         // 根据categorys生成option数组, 更新option状态
         const options = categorys.map(c => ({
@@ -23,9 +32,9 @@ class ProductAddUpdate extends Component {
         }))
 
         //如果是一个二级分类商品的更新
-        const {isUpdate, product} = this
-        const {pCategoryId } = product
-        if(isUpdate && pCategoryId!=='0') {
+        const { isUpdate, product } = this
+        const { pCategoryId } = product
+        if (isUpdate && pCategoryId !== '0') {
             //获取对应的二级分类列表
             const subCategorys = await this.getCategorys(pCategoryId)
             //生成二级下拉列表的Options
@@ -106,6 +115,9 @@ class ProductAddUpdate extends Component {
         // 进行表单验证. 如果通过了,才发送请求
         this.props.form.validateFields((err, val) => {
             if (!err) {
+                const imgs = this.pw.current.getImgs()
+                const detail = this.editor.current.getDetail()
+                console.log("imgs",imgs, "->detail", detail)
                 alert('提交')
             }
         })
@@ -127,7 +139,7 @@ class ProductAddUpdate extends Component {
     render() {
         //指定Item布局的配置对象
         const { isUpdate, product } = this
-        const { pCategoryId, categoryId } = product
+        const { pCategoryId, categoryId, imgs, detail } = product
         //用来接收集联分类ID的数组
         const categoryIds = []
         if (isUpdate) {
@@ -214,10 +226,10 @@ class ProductAddUpdate extends Component {
                         }
                     </Item>
                     <Item label="商品图片">
-                        <PicturesWall></PicturesWall>
+                        <PicturesWall ref={this.pw} imgs={imgs}/>
                     </Item>
-                    <Item label="商品详情">
-                        <Input placeholder="请输入商品名称"></Input>
+                    <Item label="商品详情" labelCol={{ span: 2 }} wrapperCol={{ span: 20 }}>
+                        <RichTextEditor ref={this.editor} detail={detail}/>
                     </Item>
                     <Item >
                         <Button type='primary' onClick={this.submit}>提交</Button>
@@ -230,3 +242,8 @@ class ProductAddUpdate extends Component {
 
 //让我们的组件能看到小写的form对象
 export default Form.create()(ProductAddUpdate)
+
+/*
+1. 子组件调用父组件的方法: 将父组件的方法以函数属性的形式传递给子组件
+2. 父组件调用子组件的方法: 在父组件中通过ref得到子组件标签对象(也就是组件对象),调用其方法
+*/
