@@ -13,6 +13,7 @@ import menuList from '../../config/menuConfig'
 import './index.less'
 
 import logo from '../../assets/images/logo.png'
+//import updateForm from '../../pages/category/update-form';
 
 const { SubMenu } = Menu;
 /*
@@ -69,8 +70,13 @@ class LeftNav extends Component {
   render() {
 //const menuNodes = this.getMenuNodes(menuList)
 //得到当前请求的路由路径
-const path = this.props.location.pathname
+let path = this.props.location.pathname
 console.log('render()',path)
+
+if(path.indexOf('/product')===0){ //当前请求了商品路径
+  path='/product'
+}
+
 const openKey = this.openKey
     return (
 

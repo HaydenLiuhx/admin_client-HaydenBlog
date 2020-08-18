@@ -4,9 +4,10 @@ import {
   Button,
   Table,
   message,
-  Modal
+  Modal,
+  Icon
 } from 'antd'
-import { PlusOutlined, ArrowRightOutlined } from '@ant-design/icons';
+//import { PlusOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import LinkButton from '../../components/link-button';
 // eslint-disable-next-line
 import { reqCategorys, reqAddCategory, reqUpdateCategory } from '../../api'
@@ -224,14 +225,14 @@ export default class Category extends Component {
     const title = parentId === '0' ? '一级分类表' : (
       <span>
         <LinkButton onClick={this.showCategorys}>一级分类列表</LinkButton>
-        <ArrowRightOutlined style={{ marginRight: 5 }} />
+        <Icon type="arrow-right" style={{ marginRight: 5 }} />
         <span>{parentName}</span>
       </span>
     )
     //card的右侧标题
     const extra = (
       <Button type='primary' onClick={this.showAdd}>
-        <PlusOutlined />
+        <Icon type="plus" />
             Add
       </Button>
     )
