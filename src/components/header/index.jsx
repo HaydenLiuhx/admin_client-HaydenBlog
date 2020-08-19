@@ -45,7 +45,9 @@ getTitle = () => {
             title = item.title
         } else if (item.children) {
             // 在所有的子item中查找
-            const cItem = item.children.find(cItem => cItem.key === path)
+            //const cItem = item.children.find(cItem => cItem.key === path)
+            //没看懂,子路由,添加商品,title
+            const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
             //如果有值,说明匹配到了
             if(cItem) {
                 title = cItem.title
