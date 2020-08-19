@@ -50,6 +50,10 @@ export const reqRoles = () => ajax(BASE + '/manage/role/list')
 export const reqAddRole = (roleName) => ajax(BASE + '/manage/role/add' , {roleName}, 'POST')
 //更新角色
 export const reqUpdateRole = (role) => ajax(BASE + '/manage/role/update' , role, 'POST')
+//获取用户列表
+export const reqUsers = () => ajax(BASE + '/users')
+//删除指定用户
+export const reqDeleteUser = (userId) => ajax(BASE + '/manage/user/delete', {userId}, 'POST')
 
 //jsonp请求
 export const reqWeather = (city) => {
