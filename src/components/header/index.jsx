@@ -61,8 +61,8 @@ getTitle = () => {
 logout = () => {
     //显示确认框
     Modal.confirm({
-        title: 'Do you Want to delete these items?',
-        content: 'Some descriptions',
+        title: 'Do you want to Login Out?',
+        content: '此选项无法撤销',
         onOk: () => {
           console.log('OK',this);
           //删除用户保存的数据
