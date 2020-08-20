@@ -263,7 +263,6 @@ export default class Category extends Component {
             parentId={parentId}
             setForm={(form) => { this.form = form }}
           />
-
         </Modal>
 
         <Modal
