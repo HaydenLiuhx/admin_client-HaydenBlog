@@ -7,6 +7,7 @@ const menuList = [
         key: '/home', // 对应的 path
 
         icon: 'home', // 图标名称
+        isPublic: true //公开的
 
     },
 
