@@ -37,7 +37,7 @@ class NormalLoginForm extends React.Component {
                     storageUtils.saveUser(user) //保存到localstorage
                     //跳转到后台管理界面
                     //push(),replace()
-                    this.props.history.replace('/') //不需要再回退回来
+                    this.props.history.replace('/home') //不需要再回退回来
                 }
                 else { //登录失败,提示错误信息
                     message.error(result.msg)

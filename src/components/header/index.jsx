@@ -10,6 +10,7 @@ import {withRouter} from 'react-router-dom'
 import {Modal} from 'antd'
 import './index.less'
 import LinkButton from '../link-button'
+import { connect } from 'react-redux'
 /*
 Header组件
 */
@@ -95,8 +96,8 @@ componentWillUnmount () {
 
         const {currentTime, dayPictureUrl, weather, temperature} = this.state
         const username = memoryUtils.user.username
-        const title = this.getTitle()
-
+        //const title = this.getTitle()
+        const title = this.props.headTitle
         return (
             <div className="header">
                 <div className="header-top">
@@ -118,4 +119,8 @@ componentWillUnmount () {
     }
 }
 
-export default withRouter(Header)
+//读和更新都要包装生成容器组件
+export default connect(
+    state => ({headTitle: state.headTitle}),
+    {}
+)(withRouter(Header))
