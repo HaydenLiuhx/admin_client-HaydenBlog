@@ -21,6 +21,7 @@
     }
 
     .login-content{
+        position: relative;
         width: 400px;
         height: 350px;
         background-color: #ffffffd6;
@@ -31,6 +32,26 @@
         border: 1px solid #eaeaea;
         box-shadow: 0 0 50px #cac6c6;
         border-radius: 20px;
+
+        .error-msg {
+            visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-align: center;
+            height: 30px;
+            width: 100%;
+            background: #ffffff00;
+            color: #37B286;
+            font-size: 16px;
+            font-weight: bold;
+            transform: translateY(-100px);
+            transition: all .3s;
+            &.show {
+            visibility: visible;
+            transform: translateY(0);
+            }
+        }
        
         h2 {
             font-size: 28px;

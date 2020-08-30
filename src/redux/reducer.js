@@ -1,7 +1,7 @@
 //用来根据老的state和指定的action生成并返回新的state的函数
 import storageUtils from '../utils/storageUtils'
 import { combineReducers } from 'redux'
-import { SET_HEAD_TITLE } from './action-types'
+import { SET_HEAD_TITLE, RECEIVE_USER, SHOW_ERROR_MSG, RESET_USER } from './action-types'
 //用来管理头部标题的reducer函数
 const initHeadTitle = '首页'
 function headTitle(state=initHeadTitle, action) {
@@ -16,6 +16,15 @@ function headTitle(state=initHeadTitle, action) {
 const initUser = storageUtils.getUser()
 function user(state=initUser, action) {
     switch (action.type) {
+        case RECEIVE_USER:
+            return action.user
+        case SHOW_ERROR_MSG:
+            const errorMsg = action.errorMsg
+            //state.errorMsg = errorMsg 
+            //不能直接修改state,要返回一个新的state
+            return {...state, errorMsg}
+        case RESET_USER:
+            return {}
         default:
             return state
     }

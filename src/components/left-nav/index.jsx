@@ -13,7 +13,7 @@ import menuList from '../../config/menuConfig'
 import './index.less'
 
 import logo from '../../assets/images/logo.png'
-import memoryUtils from '../../utils/memoryUtils';
+//import memoryUtils from '../../utils/memoryUtils';
 //import updateForm from '../../pages/category/update-form';
 import { connect } from 'react-redux'
 import { setHeadTitle } from '../../redux/actions'
@@ -27,8 +27,10 @@ class LeftNav extends Component {
   hasAuth = (item) => {
     const {key, isPublic} = item
 
-    const menus = memoryUtils.user.role.menus
-    const username = memoryUtils.user.username
+    // const menus = memoryUtils.user.role.menus
+    // const username = memoryUtils.user.username
+    const menus = this.props.user.role.menus
+    const username = this.props.user.username
     /* 
       1.如果当前用户是admin
       2.如果当前item是公开的,直接返回true
@@ -197,6 +199,6 @@ withRouter高阶组件
 新的组件向非路由组件传递3各属性: history/location/match
 */
 export default connect(
-  state => ({}),
+  state => ({user: state.user}),
   {setHeadTitle}
 )(withRouter(LeftNav))

@@ -5,13 +5,15 @@ import {Redirect} from 'react-router-dom'
 //import ReactDOM from 'react-dom';
 import { Input, Button, Checkbox } from 'antd';
 import { Form, Icon } from '@ant-design/compatible';
-import { message } from 'antd'
+//import { message } from 'antd'
 import './login.less'
 import logo from '../../assets/images/logo.png'
-import { reqLogin } from '../../api'
-import memoryUtils from '../../utils/memoryUtils'
-import storageUtils from '../../utils/storageUtils'
+//import { reqLogin } from '../../api'
+//import memoryUtils from '../../utils/memoryUtils'
+//import storageUtils from '../../utils/storageUtils'
 import '@ant-design/compatible/assets/index.css';
+import { connect } from 'react-redux'
+import { login } from '../../redux/actions'
 //const Item = Form.Item; //不能写在import前
 
 //登录的路由组件
@@ -25,7 +27,11 @@ class NormalLoginForm extends React.Component {
             if (!err) {
                 // 校验成功
                 const { username, password } = values
-                const result = await reqLogin(username, password)
+                //调用分发异步action的函数 =》 发登录的异步请求
+                this.props.login(username, password) 
+
+                /*
+                 const result = await reqLogin(username, password)
                 //console.log("Request successful", response.data)
                 //{status:0, data: user} //{status:1, msg:xx}
                 
@@ -41,7 +47,8 @@ class NormalLoginForm extends React.Component {
                 }
                 else { //登录失败,提示错误信息
                     message.error(result.msg)
-                }
+                } 
+                */
             }
             else {
                 console.log(err)
@@ -84,11 +91,14 @@ class NormalLoginForm extends React.Component {
 
     render() {
         //如果用户已经登录,自动跳转到管理界面,先关闭!!
+        //const user = memoryUtils.user
+        const user = this.props.user
+        if(user && user._id) {
+            //return <Redirect to='/admin'/>
+            return <Redirect to='/home'/>
+        }
 
-        // const user = memoryUtils.user
-        // if(user && user._id) {
-        //     return <Redirect to='/admin'/>
-        // }
+        //const errorMsg = this.props.user.errorMsg
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="login">
@@ -97,6 +107,8 @@ class NormalLoginForm extends React.Component {
                     <h1>Backend Admin Control System -- Hayden</h1>
                 </header>
                 <section className="login-content">
+                    {/* <div>{errorMsg}</div> */}
+                    <div className={user.errorMsg ? 'error-msg show' : 'error-msg'}>{user.errorMsg}</div>
                     <h2>User Sign in</h2>
                     <div>
                         <Form onSubmit={this.handleSubmit} className="login-form">
@@ -179,7 +191,10 @@ class NormalLoginForm extends React.Component {
 
 //const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(NormalLoginForm);
 const WrapLogin = Form.create()(NormalLoginForm)
-export default WrapLogin
+export default connect(
+    state => ({user: state.user}),
+    {login}
+)(WrapLogin)
 //ReactDOM.render(<WrappedNormalLoginForm />, mountNode);
 
 
