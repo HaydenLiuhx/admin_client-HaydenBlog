@@ -4,12 +4,14 @@ import {reqWeather} from '../../api'
 import menuList from '../../config/menuConfig'
 //import LinkButton from '../link-button'
 //export default不需要加{}
-import memoryUtils from '../../utils/memoryUtils'
-import storageUtils from '../../utils/storageUtils'
+//import memoryUtils from '../../utils/memoryUtils'
+//import storageUtils from '../../utils/storageUtils'
 import {withRouter} from 'react-router-dom'
 import {Modal} from 'antd'
 import './index.less'
 import LinkButton from '../link-button'
+import { connect } from 'react-redux'
+import { logout } from '../../redux/actions'
 /*
 Header组件
 */
@@ -65,10 +67,13 @@ logout = () => {
         content: '此选项无法撤销',
         onOk: () => {
           console.log('OK',this);
+          this.props.logout()
+         /* 
           //删除用户保存的数据
           storageUtils.removeUser();
-          memoryUtils.user = {}
-          this.props.history.replace('/login')
+          memoryUtils.user = {} 
+          */
+          //this.props.history.replace('/login')
         },
         onCancel() {
           console.log('Cancel');
@@ -94,9 +99,10 @@ componentWillUnmount () {
     render() {
 
         const {currentTime, dayPictureUrl, weather, temperature} = this.state
-        const username = memoryUtils.user.username
-        const title = this.getTitle()
-
+        //const username = memoryUtils.user.username
+        const username = this.props.user.username
+        //const title = this.getTitle()
+        const title = this.props.headTitle
         return (
             <div className="header">
                 <div className="header-top">
@@ -118,4 +124,10 @@ componentWillUnmount () {
     }
 }
 
-export default withRouter(Header)
+//读和更新都要包装生成容器组件
+export default connect(
+    state => ({
+        headTitle: state.headTitle,
+        user: state.user}),
+    {logout}
+)(withRouter(Header))
