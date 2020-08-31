@@ -41,7 +41,7 @@ export default class Bar extends React.Component {
                 sales: 38
             },
             {
-                year: "59 月",
+                year: "9 月",
                 sales: 68
             },
             {
@@ -63,7 +63,7 @@ export default class Bar extends React.Component {
             }
         }
         return (
-            <div style={{ width: '100%', marginLeft: -30 }}>
+            <div style={{ width: '100%', margin: 5 }}>
                 <Chart height={338} data={data} scale={cols} forceFit>
                     <Axis name="year" />
                     <Axis name="sales" />

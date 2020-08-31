@@ -100,7 +100,7 @@ export default class Line extends React.Component {
         }
         return (
             <div
-                style={{ float: 'right', width: 1070, height: 350, bottom: 20, position: 'relative' }}>
+                style={{ float: 'right', width: 1000, height: 350, bottom: 20, position: 'relative', right: 50 }}>
                 <Chart height={300} padding={[30,20,80,100]} autoFit data={dv} scale={cols} forceFit>
                     <Legend />
                     <Axis name="month" />
