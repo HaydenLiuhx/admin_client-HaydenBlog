@@ -74,13 +74,13 @@ export default class Line extends React.Component {
                 month: "Nov",
                 a: 13.9,
                 b: 6.6,
-                c: 30.9
+                c: 35.9
             },
             {
                 month: "Dec",
                 a: 9.6,
                 b: 4.8,
-                c: 35.9
+                c: 16.9
             }
         ]
         const ds = new DataSet()
@@ -100,8 +100,8 @@ export default class Line extends React.Component {
         }
         return (
             <div
-                style={{ float: 'right', width: 750, height: 300 }}>
-                <Chart height={250} data={dv} scale={cols} forceFit>
+                style={{ float: 'right', width: 1070, height: 350, bottom: 20, position: 'relative' }}>
+                <Chart height={300} padding={[30,20,80,100]} autoFit data={dv} scale={cols} forceFit>
                     <Legend />
                     <Axis name="month" />
                     <Axis
