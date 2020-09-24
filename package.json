@@ -19,6 +19,7 @@
     "jsonp": "^0.2.1",
     "less": "^3.12.2",
     "less-loader": "^6.2.0",
+    "mime": "^2.4.6",
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.6",
     "react-dom": "^16.13.1",
@@ -26,9 +27,12 @@
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
+    "react-transition-group": "^4.4.1",
+    "react-vivus": "0.0.2",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "store": "^2.0.12"
+    "store": "^2.0.12",
+    "vivus": "^0.4.5"
   },
   "scripts": {
     "start": "react-app-rewired start",

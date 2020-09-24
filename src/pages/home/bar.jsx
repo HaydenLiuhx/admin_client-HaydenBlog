@@ -63,7 +63,7 @@ export default class Bar extends React.Component {
             }
         }
         return (
-            <div style={{ width: '100%', margin: 5 }}>
+            <div style={{ width: '95%', margin: 7 }}>
                 <Chart height={338} data={data} scale={cols} forceFit>
                     <Axis name="year" />
                     <Axis name="sales" />

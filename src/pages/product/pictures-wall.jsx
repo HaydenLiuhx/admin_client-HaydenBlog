@@ -33,7 +33,7 @@ state = {
     const {imgs} = this.props
     // console.log(imgs.length)
     // console.log(imgs)
-    if (imgs && imgs.length > 1) {
+    if (imgs && imgs.length > 0) {
       fileList = imgs.map((img,index) => ({
         uid: -index, //每个file都有自己唯一的ID,防止和内部ID产生冲突
         name: img, //图片文件名
@@ -60,7 +60,7 @@ state = {
   //隐藏Modal
   handleCancel = () => this.setState({ previewVisible: false });
 
-  handlePreview = async file => {
+  handlePreview = async (file) => {
     //显示指定file对应的大图
     console.log(file)
     if (!file.url && !file.preview) {
